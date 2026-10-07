@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071b33">
+  <title>Titanic | Resultados del viaje</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --navy: #071b33;
+      --deep: #0a2340;
+      --blue: #12395d;
+      --mid: #245b80;
+      --pale: #a8ccda;
+      --ice: #dcecf0;
+      --gold: #e3c48a;
+      --muted: #8ca8bb;
+      --line: rgba(178, 213, 227, .16);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--navy);
+      color: var(--ice);
+      font-family: "Avenir Next", Avenir, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .ocean-glow {
+      position: absolute;
+      z-index: -1;
+      inset: 0 0 auto;
+      height: 790px;
+      background: radial-gradient(ellipse at 77% 33%, rgba(36, 91, 128, .3), transparent 50%), linear-gradient(180deg, #0b2541 0%, var(--navy) 92%);
+      pointer-events: none;
+    }
+    .page-shell { width: min(1120px, calc(100% - 64px)); margin: 0 auto; }
+    .masthead { height: 86px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+    .wordmark { display: flex; align-items: center; gap: 11px; color: var(--ice); font-size: 15px; font-weight: 700; letter-spacing: .18em; text-decoration: none; }
+    .wordmark-icon { color: var(--gold); font-size: 25px; }
+    .wordmark small { display: block; margin-top: 1px; color: var(--muted); font-size: 8px; font-weight: 500; letter-spacing: .17em; }
+    .voyage-tag { color: var(--muted); font-size: 9px; letter-spacing: .14em; }
+    .voyage-tag span { display: inline-block; width: 6px; height: 6px; margin-right: 8px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 11px var(--gold); }
+    .hero { min-height: 435px; display: grid; grid-template-columns: .95fr 1.05fr; align-items: center; gap: 34px; padding: 40px 0 33px; }
+    .eyebrow { margin: 0 0 17px; color: var(--gold); font-size: 9px; font-weight: 700; letter-spacing: .2em; }
+    h1, h2 { margin: 0; font-family: Georgia, serif; font-weight: 500; line-height: 1.08; }
+    h1 { font-size: clamp(49px, 6vw, 75px); letter-spacing: -.035em; }
+    h1 em, h2 em { color: var(--pale); font-weight: 500; }
+    .hero-intro { max-width: 390px; margin: 21px 0 23px; color: #a8bdcc; font-size: 14px; line-height: 1.8; }
+    .hero-link { color: var(--ice); font-size: 9px; font-weight: 700; letter-spacing: .14em; text-decoration: none; }
+    .hero-link span { margin-left: 8px; color: var(--gold); font-size: 14px; }
+    .ship-scene { position: relative; height: 325px; overflow: hidden; border-bottom: 1px solid rgba(168, 204, 218, .2); background: radial-gradient(ellipse at 74% 34%, rgba(201, 224, 231, .15), transparent 9%), radial-gradient(ellipse at 74% 34%, rgba(100, 160, 188, .11), transparent 35%), linear-gradient(180deg, rgba(18, 57, 93, .05), rgba(18, 57, 93, .36)); }
+    .moon { position: absolute; top: 45px; right: 90px; width: 47px; height: 47px; border-radius: 50%; background: #d7e9eb; box-shadow: 0 0 38px rgba(197, 223, 230, .32); opacity: .83; }
+    .ship { position: absolute; right: 13%; bottom: 93px; width: 305px; height: 135px; }
+    .hull { position: absolute; right: 0; bottom: 0; width: 100%; height: 43px; background: linear-gradient(180deg, #b4cbd0 0 19%, #567c8c 20% 42%, #0a1d31 43%); clip-path: polygon(0 0, 100% 0, 87% 70%, 79% 100%, 19% 89%, 7% 42%); }
+    .deck { position: absolute; right: 29px; bottom: 40px; width: 211px; height: 47px; background: repeating-linear-gradient(90deg, #b4cbd0 0 4px, #7699a8 4px 7px, transparent 7px 12px) 0 25px / 100% 13px no-repeat, linear-gradient(180deg, transparent 0 23px, #c3d6d9 23px 27px, transparent 27px), linear-gradient(180deg, #9bb8c0, #7899a8); clip-path: polygon(7% 0, 100% 0, 100% 100%, 0 100%); }
+    .funnel { position: absolute; bottom: 84px; width: 23px; height: 50px; background: linear-gradient(90deg, #b6c8c7 0 24%, #b88c68 25% 78%, #e7d9ba 79%); }
+    .funnel-one { right: 194px; }.funnel-two { right: 139px; height: 42px; }
+    .smoke { position: absolute; width: 48px; height: 20px; border-radius: 50%; background: rgba(183, 205, 211, .1); filter: blur(6px); }
+    .smoke-one { right: 185px; bottom: 132px; }.smoke-two { right: 127px; bottom: 124px; }
+    .sea-line { position: absolute; right: -6%; width: 113%; height: 1px; background: rgba(139, 185, 202, .17); transform: rotate(-2deg); }
+    .sea-one { bottom: 61px; }.sea-two { bottom: 43px; right: 12%; }
+    .scene-caption { position: absolute; right: 0; bottom: 12px; color: #66859a; font-size: 8px; letter-spacing: .18em; }
+    .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr) 1.2fr; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .stat-strip > div { display: flex; flex-direction: column; gap: 2px; padding-left: 25px; border-left: 1px solid var(--line); }
+    .stat-strip > div:first-child { padding-left: 0; border-left: 0; }
+    .stat-value { color: var(--ice); font-family: Georgia, serif; font-size: 28px; line-height: 1.2; }
+    .stat-label { color: var(--muted); font-size: 8px; letter-spacing: .14em; }
+    .split-note { justify-content: center; }
+    .split-value { color: var(--pale); font-size: 12px; }
+    .results-section { padding: 94px 0 0; scroll-margin-top: 28px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 31px; }
+    h2 { font-size: 47px; letter-spacing: -.025em; }
+    .section-description { max-width: 340px; margin: 0 0 5px; color: #9cb2c1; font-size: 12px; line-height: 1.85; }
+    .model-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 17px; }
+    .model-card { padding: 24px 27px 25px; border: 1px solid var(--line); background: linear-gradient(145deg, rgba(18, 57, 93, .53), rgba(10, 35, 64, .48)); }
+    .model-card.featured { border-color: rgba(227, 196, 138, .34); background: linear-gradient(145deg, rgba(30, 68, 99, .65), rgba(10, 35, 64, .52)); }
+    .card-topline, .metric-list > div { display: flex; justify-content: space-between; align-items: center; }
+    .model-index { color: var(--gold); font-family: Georgia, serif; font-size: 21px; }
+    .model-kind { color: var(--muted); font-size: 8px; letter-spacing: .15em; }
+    .model-card h3 { margin: 7px 0 21px; color: var(--ice); font-family: Georgia, serif; font-size: 23px; font-weight: 500; }
+    .accuracy-heading { display: flex; justify-content: space-between; align-items: center; }
+    .accuracy-heading > span, .metric-list span { color: #9cb2c1; font-size: 10px; }
+    .accuracy-heading strong { color: var(--ice); font-family: Georgia, serif; font-size: 34px; font-weight: 500; }
+    .accuracy-heading small { color: var(--pale); font-family: sans-serif; font-size: 15px; }
+    .progress-track { height: 4px; overflow: hidden; background: rgba(168, 204, 218, .12); }
+    .progress-track > span { display: block; height: 100%; background: linear-gradient(90deg, #5792ae, #c0dce1); }
+    .featured .progress-track > span { background: linear-gradient(90deg, #af9666, var(--gold)); }
+    .metric-list { display: grid; gap: 10px; margin: 19px 0 21px; }
+    .metric-list > div { padding-bottom: 8px; border-bottom: 1px solid rgba(178, 213, 227, .1); }
+    .metric-list strong { color: var(--ice); font-size: 10px; font-weight: 600; }
+    .matrix-wrap { padding-top: 3px; }
+    .matrix-title { color: var(--muted); font-size: 8px; font-weight: 700; letter-spacing: .12em; }
+    .matrix-title small { margin-left: 6px; font-size: 8px; font-weight: 400; letter-spacing: 0; }
+    .matrix { display: grid; grid-template-columns: 65px 1fr 1fr; gap: 3px; margin-top: 10px; text-align: center; }
+    .matrix-col, .matrix-row { align-self: center; color: var(--muted); font-size: 9px; }
+    .matrix-cell { padding: 8px; background: rgba(86, 139, 165, .12); color: var(--ice); font-size: 11px; }
+    .matrix-cell:nth-child(5), .matrix-cell:nth-child(9) { background: rgba(86, 139, 165, .24); }
+    .method-note { margin: 14px 0 0; color: #718da1; font-size: 9px; }
+    .footer { display: flex; justify-content: space-between; gap: 16px; margin-top: 74px; padding: 21px 0 29px; border-top: 1px solid var(--line); color: #718da1; font-size: 8px; letter-spacing: .14em; }
+    @media (max-width: 760px) {
+      .page-shell { width: min(100% - 38px, 560px); }
+      .masthead { height: 72px; }.voyage-tag { font-size: 7px; }
+      .hero { min-height: 0; grid-template-columns: 1fr; gap: 12px; padding: 51px 0 29px; }
+      .hero-intro { max-width: 460px; }.ship-scene { height: 255px; }
+      .ship { right: 7%; transform: scale(.82); transform-origin: right bottom; }
+      .moon { right: 65px; top: 31px; }
+      .stat-strip { grid-template-columns: 1fr 1fr; gap: 19px 0; }
+      .stat-strip > div:nth-child(3) { padding-left: 0; border-left: 0; }
+      .section-heading { align-items: start; flex-direction: column; gap: 12px; }
+      .section-description { max-width: 450px; }
+      .model-grid { grid-template-columns: 1fr; }
+      .results-section { padding-top: 70px; }
+      .footer { flex-direction: column; margin-top: 52px; }
+    }
+    @media (max-width: 420px) {
+      .wordmark { font-size: 12px; }.wordmark small { font-size: 7px; }
+      .voyage-tag { max-width: 130px; text-align: right; line-height: 1.6; }
+      h2 { font-size: 41px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ocean-glow" aria-hidden="true"></div>
+  <main class="page-shell">
+    <header class="masthead">
+      <a class="wordmark" href="#" aria-label="Titanic, inicio">
+        <span class="wordmark-icon" aria-hidden="true">✦</span>
+        <span>TITANIC <small>ANÁLISIS DE SUPERVIVENCIA</small></span>
+      </a>
+      <span class="voyage-tag"><span></span> INFORME DEL VIAJE · 1912</span>
+    </header>
+
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">UN VIAJE A TRAVÉS DE LOS DATOS</p>
+        <h1>¿Quién habría<br><em>sobrevivido?</em></h1>
+        <p class="hero-intro">Dos modelos de aprendizaje automático exploran las historias de los pasajeros del Titanic. Aquí puedes consultar y comparar sus resultados.</p>
+        <a class="hero-link" href="#resultados">EXPLORAR RESULTADOS <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="ship-scene" aria-hidden="true">
+        <div class="moon"></div>
+        <div class="ship">
+          <div class="smoke smoke-one"></div><div class="smoke smoke-two"></div>
+          <div class="funnel funnel-one"></div><div class="funnel funnel-two"></div>
+          <div class="deck"></div><div class="hull"></div>
+        </div>
+        <div class="sea-line sea-one"></div><div class="sea-line sea-two"></div>
+        <span class="scene-caption">ATLÁNTICO NORTE · 14 ABR 1912</span>
+      </div>
+    </section>
+
+    <section class="stat-strip" aria-label="Resumen de los datos">
+      <div><span class="stat-value">891</span><span class="stat-label">PASAJEROS ANALIZADOS</span></div>
+      <div><span class="stat-value">342</span><span class="stat-label">SUPERVIVIENTES EN EL DATASET</span></div>
+      <div><span class="stat-value">179</span><span class="stat-label">PASAJEROS EN EVALUACIÓN</span></div>
+      <div class="split-note"><span class="stat-label">CONJUNTO DE PRUEBA</span><span class="split-value">20% · estratificado</span></div>
+    </section>
+
+    <section class="results-section" id="resultados">
+      <div class="section-heading">
+        <div><p class="eyebrow">01 — RENDIMIENTO</p><h2>Dos modelos,<br><em>una travesía.</em></h2></div>
+        <p class="section-description">Evaluados sobre el mismo conjunto de prueba de 179 pasajeros para comparar sus predicciones en igualdad de condiciones. Las métricas de precisión, exhaustividad y F1 corresponden a la clase superviviente.</p>
+      </div>
+
+      <div class="model-grid">
+        <article class="model-card featured">
+          <div class="card-topline"><span class="model-index">01</span><span class="model-kind">ENSAMBLE</span></div>
+          <h3>Random Forest</h3>
+          <div class="accuracy-block">
+            <div class="accuracy-heading"><span>Exactitud</span><strong>81.56<small>%</small></strong></div>
+            <div class="progress-track" role="img" aria-label="Exactitud: 81.56 por ciento"><span style="width: 81.56%"></span></div>
+          </div>
+          <div class="metric-list">
+            <div><span>Precisión · supervivientes</span><strong>87.50%</strong></div>
+            <div><span>Exhaustividad · supervivientes</span><strong>60.87%</strong></div>
+            <div><span>Puntuación F1 · supervivientes</span><strong>71.79%</strong></div>
+          </div>
+          <div class="matrix-wrap">
+            <span class="matrix-title">MATRIZ DE CONFUSIÓN <small>real ↓ · predicción →</small></span>
+            <div class="matrix" role="table" aria-label="Matriz de confusión Random Forest">
+              <span></span><span class="matrix-col" role="columnheader">No</span><span class="matrix-col" role="columnheader">Sí</span>
+              <span class="matrix-row" role="rowheader">No</span><span class="matrix-cell" role="cell">104</span><span class="matrix-cell" role="cell">6</span>
+              <span class="matrix-row" role="rowheader">Sí</span><span class="matrix-cell" role="cell">27</span><span class="matrix-cell" role="cell">42</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="model-card">
+          <div class="card-topline"><span class="model-index">02</span><span class="model-kind">MODELO LINEAL</span></div>
+          <h3>Regresión logística</h3>
+          <div class="accuracy-block">
+            <div class="accuracy-heading"><span>Exactitud</span><strong>80.45<small>%</small></strong></div>
+            <div class="progress-track" role="img" aria-label="Exactitud: 80.45 por ciento"><span style="width: 80.45%"></span></div>
+          </div>
+          <div class="metric-list">
+            <div><span>Precisión · supervivientes</span><strong>79.31%</strong></div>
+            <div><span>Exhaustividad · supervivientes</span><strong>66.67%</strong></div>
+            <div><span>Puntuación F1 · supervivientes</span><strong>72.44%</strong></div>
+          </div>
+          <div class="matrix-wrap">
+            <span class="matrix-title">MATRIZ DE CONFUSIÓN <small>real ↓ · predicción →</small></span>
+            <div class="matrix" role="table" aria-label="Matriz de confusión Regresión logística">
+              <span></span><span class="matrix-col" role="columnheader">No</span><span class="matrix-col" role="columnheader">Sí</span>
+              <span class="matrix-row" role="rowheader">No</span><span class="matrix-cell" role="cell">98</span><span class="matrix-cell" role="cell">12</span>
+              <span class="matrix-row" role="rowheader">Sí</span><span class="matrix-cell" role="cell">23</span><span class="matrix-cell" role="cell">46</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      <p class="method-note">Resultados tomados del entrenamiento guardado en 4_5_train.ipynb. Partición estratificada de prueba: 20%, random_state = 42. Matrices: filas = clase real, columnas = clase predicha.</p>
+    </section>
+
+    <footer class="footer"><span>TITANIC · MANIFIESTO DE DATOS</span><span>HECHO CON CURIOSIDAD Y APRENDIZAJE AUTOMÁTICO</span></footer>
+  </main>
+</body>
+</html>
